@@ -7,6 +7,15 @@
 
     <div v-else>
       <ViewPost  :post="post" :showText="true"/>
+      <div class="container-fluid p-0">
+        <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 my-3">
+          <h5>
+            <Tags v-for="(Tag, i) in tags" :key="i" :tag="Tag"/>
+          </h5>
+        </div>  
+        
+      </div>
+      
     </div>
   </div>
 </template>
@@ -14,15 +23,17 @@
 <script>
 import axios from "axios";
 import ViewPost from "@/components/ViewPost";
+import Tags from "@/components/Tags";
 //import bkImage from "../img/e-u-p-s.jpg"
 export default {
   name: "ShowPost",
-  components: { ViewPost },
+  components: { ViewPost, Tags },
   data() {
     return {
       loading: true,
       post: null,
-      tag:null
+      
+      tags:[]
     };
   },
   async created() {
@@ -32,11 +43,8 @@ export default {
     );
     this.post = res.data;
 
-    /*const tagRes = await axios.get(
-      "http://127.0.0.1:3333/articles/" + this.post.id
-    );
-    this.tag = tagRes.data;
-    this.loading = false;*/
+    const tagRes = await axios.get(`http://127.0.0.1:3333/articles/${id}/tags/`);
+    this.tags = tagRes.data;
     this.loading = false;
   }
 }
